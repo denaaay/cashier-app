@@ -1,0 +1,29 @@
+[
+    {
+        "name": "deni fahrony",
+        "Cart": [
+            {
+                "id": "1",
+                "name": "Tea",
+                "price": "20000",
+                "Quantity": "1",
+                "Total": 20000
+            },
+            {
+                "id": "2",
+                "name": "Milk",
+                "price": "10000",
+                "Quantity": "1",
+                "Total": 10000
+            },
+            {
+                "id": "4",
+                "name": "Apple",
+                "price": "15000",
+                "Quantity": "2",
+                "Total": 30000
+            }
+        ],
+        "total_price": 60000
+    }
+]

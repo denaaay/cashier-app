@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Dashboard Page</title>
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <script>
+        function displayQty(listData, checkId, qtyId) {
+            var checkBox = document.getElementById(checkId);
+            var qty = document.getElementById(qtyId);
+            if (checkBox.checked == true) {
+                qty.style.display = "block";
+                checkBox.value = listData + "," + qty.value
+            } else {
+                qty.style.display = "none";
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: Poppins;
+            margin: 0;
+            background-color: #0be881;
+            color: #1e272e;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .sec-main{
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+            margin-bottom: 30px;
+            background-color: whitesmoke;
+            padding: 30px 30px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .head-nav {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        header > h1 {
+            margin: 0;
+            margin-bottom: 20px;
+        }
+
+        nav {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav1 {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logout-button {
+            height: max-content;
+            padding: 10px 10px;
+            font-size: 20px;
+            background-color: #05c46b;
+            color: white;
+            border-radius: 5px;
+            border: none;
+            box-shadow: 2px 2px 0.5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .logout-button:hover {
+            opacity: 75%;
+        }
+
+        .logout-button:active {
+            background-color: white;
+            color: #05c46b;
+        }
+
+        .nav2 {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .avatar {
+            float: left;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+
+        .avatar:hover {
+            background-color: #000;
+            cursor: pointer;
+        }
+
+        .navbar {
+            width: 100%;
+            overflow: auto;
+            margin-top: 20px;
+        }
+
+        .cart {
+            width: 90%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 50px;
+            background-color: whitesmoke;
+            padding: 30px 30px;
+            border-radius: 10px;
+            box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu {
+            float: left;
+            text-align: center;
+            padding: 12px;
+            color: #000;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .listcart {
+            flex: 1;
+        }
+
+        .daftarcart {
+            margin-left: 30px;
+            font-size: 23px;
+            font-weight: 200;
+        }
+
+        .daftarcart > form > button {
+            margin-top: 20px;
+            padding: 10px 10px;
+            font-size: 20px;
+            background-color: #05c46b;
+            color: white;
+            border-radius: 5px;
+            border: none;
+            box-shadow: 2px 2px 0.5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .daftarcart > form > button:hover {
+            opacity: 75%;
+        }
+
+        .daftarcart > form > button:active {
+            background-color: white;
+            color: #05c46b;
+        }
+
+        .mycart {
+            flex: 1;
+            margin-left: 30px;
+            font-size: 15px;
+            font-weight: 200;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main>
+        <div class="sec-main">
+            <div class="head-nav">
+                <header>
+                    <h1>Dashboard Page</h1>
+                </header>
+            
+                <nav>
+                    <div class="nav1">
+                        <div>
+                            <img src="/user/img/profile" alt="Avatar" class="avatar">
+                            <label class="menu">Hello {{.Cart.Name}}</label>
+                        </div>
+                        <form method="get" action="/user/logout">
+                            <button type="submmit" class="logout-button">Logout</button>
+                        </form>
+                    </div>
+
+                    <form method="post" action="/user/img/update-profile" enctype="multipart/form-data">
+                        <div class="navbar">                        
+                            <div class="nav2">
+                                <label class="menu">Update Profile: </label>
+                                <input type="file" name="file-avatar" required />
+                                <input type="submit">
+                            </div>
+                        </div>
+                    </form>
+                </nav>
+            </div>
+        </div>
+
+        <div class="cart">
+            <section class="listcart">
+                <h2>List Product</h2>
+                <div class="daftarcart">
+                    <form method="post" action="/cart/add">
+                        {{range $val := .Product}}
+                        <input type="checkbox" id="check-{{ .Id }}" name="product"
+                            onclick="displayQty('{{ .Id }},{{ .Name }},{{ .Price }}', 'check-{{ .Id }}', 'qty-{{ .Id }}')">
+                        <label>{{ .Id }}. {{ .Name }}: Rp. {{ .Price }},-</label>
+                        <input type="number" style="display:none" id="qty-{{ .Id }}" value="1" min="1" max="100"
+                            onchange="displayQty('{{ .Id }},{{ .Name }},{{ .Price }}', 'check-{{ .Id }}', 'qty-{{ .Id }}')">
+                        <br>
+                        {{else}}
+                        Empty Product
+                        {{end}}
+                        <button type="submmit">Add to Cart</button>
+                    </form>
+                </div>
+            </section>
+        
+            <section class="mycart">
+                <h2>My Cart</h2>
+        
+                <ul>
+                    {{range $val := .Cart.Cart}}
+                    <li>{{ .Name }}
+                        <ul>
+                            <li>Price: Rp. {{ .Price }},-</li>
+                            <li>Quantity: {{ .Quantity }}</li>
+                            <li>Total: {{ .Total }}</li>
+                        </ul>
+                    </li>
+                    {{else}}
+                    Empty Cart
+                    {{end}}
+                </ul>
+                <p>Total Price Rp. {{.Cart.TotalPrice}},-</p>
+            </section>
+        </div>
+    </main>
+
+</body>
+
+</html>
